@@ -33,10 +33,10 @@ Content-Type: application/json
 
 Body:
 {
-“title”:”글의 제목입니다”,
-“contents”:”글의 내용입니다”,
-“name”:”이상민”,
-“password”:”qwer1234”
+  “title”:”글의 제목입니다”,
+  “contents”:”글의 내용입니다”,
+  “name”:”이상민”,
+  “password”:”qwer1234”
 }
 ```
 ```
@@ -46,12 +46,12 @@ Status Code: 201 Created
 
 Body:
 {
-"id":1,
-“title”:”글의 제목입니다”,
-“contents”:”글의 내용입니다”,
-“name”:”이상민”,
-"created":"2026-06-30",
-"updated":"2026-06-30"
+  "id":1,
+  “title”:”글의 제목입니다”,
+  “contents”:”글의 내용입니다”,
+  “name”:”이상민”,
+  "created":"2026-06-30",
+  "updated":"2026-06-30"
 }
 ```
 
@@ -75,22 +75,22 @@ Status Code: 200 OK
 
 Body:
 [
-{
-"id":1,
-“title”:”글의 제목입니다”,
-“contents”:”글의 내용입니다”,
-“name”:”이상민”,
-"created":"2026-06-30",
-"updated":"2026-06-30"
-},
-{
-"id":2,
-“title”:”두번째 글”,
-“contents”:”두번째 글 내용”,
-“name”:”이순신”,
-"created":"2026-06-29",
-"updated":"2026-07-01"
-}
+  {
+    "id":1,
+    “title”:”글의 제목입니다”,
+    “contents”:”글의 내용입니다”,
+    “name”:”이상민”,
+    "created":"2026-06-30",
+    "updated":"2026-06-30"
+  },
+  {
+    "id":2,
+    “title”:”두번째 글”,
+    “contents”:”두번째 글 내용”,
+    “name”:”이순신”,
+    "created":"2026-06-29",
+    "updated":"2026-07-01"
+  }
 ]
 ```
 
@@ -114,26 +114,26 @@ Status Code: 200 OK
 
 Body:
 {
-"id":1,
-“title”:”글의 제목입니다”,
-“contents”:”글의 내용입니다”,
-“name”:”이상민”,
-"created":"2026-06-30",
-"updated":"2026-06-30",
-"comments":[
-{
-  "commentID": 1,
-  "commentContents":"첫번째 댓글",
-  "name": "손흥민",
-  "commentCreated":"2026-06-30",
-},
-{
-  "commentID": 2,
-  "commentContens":"두번째 댓글",
-  "name": "홍명보",
-  "commentCreated":"2026-06-30"
-}
-]
+    "id":1,
+    “title”:”글의 제목입니다”,
+    “contents”:”글의 내용입니다”,
+    “name”:”이상민”,
+    "created":"2026-06-30",
+    "updated":"2026-06-30",
+    "comments":[
+        {
+          "commentID": 1,
+          "commentContents":"첫번째 댓글",
+          "name": "손흥민",
+          "commentCreated":"2026-06-30",
+        },
+        {
+          "commentID": 2,
+          "commentContens":"두번째 댓글",
+          "name": "홍명보",
+          "commentCreated":"2026-06-30"
+        }
+    ]
 }
 ```
 
@@ -152,9 +152,9 @@ Content-Type: `application/json`
 
 Body:
 {
-"title": "수정된 제목입니다",
-"name": "홍길동",
-"password": "qwer1234"
+  "title": "수정된 제목입니다",
+  "name": "홍길동",
+  "password": "qwer1234"
 }
 ```
 
@@ -165,12 +165,12 @@ Status Code: 200 OK
 
 Body:
 {
-"id":1,
-“title”:”수정된 제목입니다.”,
-“contents”:”글의 내용입니다”,
-“name”:”홍길동”,
-"created":"2026-06-30",
-"updated":"2026-07-01"
+  "id":1,
+  “title”:”수정된 제목입니다.”,
+  “contents”:”글의 내용입니다”,
+  “name”:”홍길동”,
+  "created":"2026-06-30",
+  "updated":"2026-07-01"
 }
 ```
 
@@ -188,7 +188,7 @@ Content-Type: `application/json`
 
 Body:
 {
-"password":"qwer1234"
+  "password":"qwer1234"
 }
 ```
 ```
@@ -196,3 +196,37 @@ Response
 
 Status Code: `204 No Content`
 ```
+<br>
+
+## 댓글관리
+### 댓글생성
+```
+Request
+Method: `POST`
+
+URL: /comments
+
+Content-Type: application/json
+
+Body:
+{
+  “commentContents”:"첫번째 댓글입니다”,
+  “commentName”:”손흥민”,
+  “password”:”asdfasdf”,
+}
+```
+```
+Response
+
+Status Code: 201 Created
+
+Body:
+{
+  "commentId":1,
+  “commentContents”:”첫번째 댓글입니다”,
+  “commentName”:”손흥민”,
+  "created":"2026-06-30",
+  "updated":"2026-06-30"
+}
+```
+

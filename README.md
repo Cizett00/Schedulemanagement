@@ -23,7 +23,7 @@
 
 ## <span id="1">일정 관리</span>
 
-###일정 생성
+### 일정 생성
 ```
 Request
 Method: `POST`

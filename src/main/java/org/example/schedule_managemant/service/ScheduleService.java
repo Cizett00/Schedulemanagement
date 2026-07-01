@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -37,11 +38,11 @@ public class ScheduleService{
     }
 
     @Transactional(readOnly = true)
-    public GetOneScheduleResponseDto getOne(Long scheduleId){
+    public GetScheduleResponseDto getOne(Long scheduleId){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 ()-> new IllegalStateException("없는 일정입니다")
         );
-        return new GetOneScheduleResponseDto(
+        return new GetScheduleResponseDto(
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
@@ -50,24 +51,61 @@ public class ScheduleService{
                 schedule.getModifiedAt()
         );
     }
-
+//
+//    @Transactional(readOnly = true)
+//    public List<GetScheduleResponseDto> getAll(String name){
+//        List<Schedule> schedules = scheduleRepository.findAll();
+//
+//        List<GetScheduleResponseDto> dtos = new ArrayList<>();
+//
+//        for (Schedule schedule : schedules) {
+//            GetScheduleResponseDto dto = new GetScheduleResponseDto(
+//                    schedule.getId(),
+//                    schedule.getTitle(),
+//                    schedule.getContents(),
+//                    schedule.getName(),
+//                    schedule.getCreatedAt(),
+//                    schedule.getModifiedAt()
+//            );
+//            dtos.add(dto);
+//        }
+//        return dtos;
+//    }
     @Transactional(readOnly = true)
-    public List<GetOneScheduleResponseDto> getAll(){
+    public List<GetScheduleResponseDto> getSchedule(String name){
         List<Schedule> schedules = scheduleRepository.findAll();
+        List<GetScheduleResponseDto> dtos = new ArrayList<>();
 
-        List<GetOneScheduleResponseDto> dtos = new ArrayList<>();
-
-        for (Schedule schedule : schedules) {
-            GetOneScheduleResponseDto dto = new GetOneScheduleResponseDto(
-                    schedule.getId(),
-                    schedule.getTitle(),
-                    schedule.getContents(),
-                    schedule.getName(),
-                    schedule.getCreatedAt(),
-                    schedule.getModifiedAt()
-            );
-            dtos.add(dto);
+        if(name != null) {
+            for (Schedule schedule : schedules) {
+                if (name.equals(schedule.getName())) {
+                    GetScheduleResponseDto dto = new GetScheduleResponseDto(
+                            schedule.getId(),
+                            schedule.getTitle(),
+                            schedule.getContents(),
+                            schedule.getName(),
+                            schedule.getCreatedAt(),
+                            schedule.getModifiedAt()
+                    );
+                    dtos.add(dto);
+                }
+            }
+        } else{
+            for (Schedule schedule : schedules) {
+                GetScheduleResponseDto dto = new GetScheduleResponseDto(
+                        schedule.getId(),
+                        schedule.getTitle(),
+                        schedule.getContents(),
+                        schedule.getName(),
+                        schedule.getCreatedAt(),
+                        schedule.getModifiedAt()
+                );
+                dtos.add(dto);
+            }
         }
+        dtos.sort((dto1, dto2) ->
+                dto2.getModified().compareTo(dto1.getModified())
+        );
         return dtos;
     }
 
@@ -92,13 +130,13 @@ public class ScheduleService{
     }
 
     @Transactional
-    public void delete(Long scheduleId){
-        boolean existence = scheduleRepository.existsById(scheduleId);
-
-        if(!existence){
-            throw new IllegalStateException("없는 일정 입니다.");
+    public void delete(Long scheduleId, DeleteScheduleRequestDto requestDto){
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                ()-> new IllegalStateException("없는 일정입니다")
+        );
+        if (!schedule.getPassword().equals(requestDto.getPassword())){
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
-
         scheduleRepository.deleteById(scheduleId);
     }
 }

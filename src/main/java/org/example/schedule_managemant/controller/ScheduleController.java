@@ -20,15 +20,23 @@ public class ScheduleController {
         CreateScheduleResponseDto result = scheduleService.createSchedule(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
-
+//
     @GetMapping("/schedules/{scheduleId}")
-    public ResponseEntity<GetOneScheduleResponseDto> GetOneSchedule(@PathVariable Long scheduleId){
-        GetOneScheduleResponseDto result = scheduleService.getOne(scheduleId);
+    public ResponseEntity<GetScheduleResponseDto> GetOneSchedule(@PathVariable Long scheduleId){
+        GetScheduleResponseDto result = scheduleService.getOne(scheduleId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+//    @GetMapping("/schedules")
+//    public ResponseEntity<List<GetScheduleResponseDto>> GetAllSchedule(){
+//        List<GetScheduleResponseDto> result = scheduleService.getAll();
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+//    }
+
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetOneScheduleResponseDto>> GetAllSchedule(){
-        List<GetOneScheduleResponseDto> result = scheduleService.getAll();
+    public ResponseEntity<List<GetScheduleResponseDto>> GetAllSchedule(
+            @RequestParam(required = false) String name
+            ){
+        List<GetScheduleResponseDto> result = scheduleService.getSchedule(name);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -42,9 +50,11 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/schedules/{scheduleId}")
-    public ResponseEntity<Void> delete(@PathVariable Long scheduleId){
-        scheduleService.delete(scheduleId);
+    public ResponseEntity<Void> delete(
+            @PathVariable Long scheduleId,
+            @RequestBody DeleteScheduleRequestDto requestDto
+            ){
+        scheduleService.delete(scheduleId, requestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

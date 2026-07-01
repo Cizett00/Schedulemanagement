@@ -2,7 +2,9 @@ package org.example.schedule_managemant.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.schedule_managemant.dto.*;
+import org.example.schedule_managemant.entity.Comment;
 import org.example.schedule_managemant.entity.Schedule;
+import org.example.schedule_managemant.repository.CommentRepository;
 import org.example.schedule_managemant.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ScheduleService{
 
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public CreateScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto){
@@ -42,11 +45,24 @@ public class ScheduleService{
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 ()-> new IllegalStateException("없는 일정입니다")
         );
+        List<GetCommentResponseDto> comments = commentRepository.findAll()
+                .stream()
+                .filter(c -> c.getSchedule_id().equals(scheduleId))
+                .map(c -> new GetCommentResponseDto(
+                        c.getCm_id(),
+                        c.getCm_content(),
+                        c.getCm_name(),
+                        c.getCreatedAt(),
+                        c.getModifiedAt()
+                ))
+                .toList();
+
         return new GetScheduleResponseDto(
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
                 schedule.getName(),
+                comments,
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt()
         );
@@ -72,14 +88,14 @@ public class ScheduleService{
 //        return dtos;
 //    }
     @Transactional(readOnly = true)
-    public List<GetScheduleResponseDto> getSchedule(String name){
+    public List<GetAllScheduleResponseDto> getSchedule(String name){
         List<Schedule> schedules = scheduleRepository.findAll();
-        List<GetScheduleResponseDto> dtos = new ArrayList<>();
+        List<GetAllScheduleResponseDto> dtos = new ArrayList<>();
 
         if(name != null) {
             for (Schedule schedule : schedules) {
                 if (name.equals(schedule.getName())) {
-                    GetScheduleResponseDto dto = new GetScheduleResponseDto(
+                    GetAllScheduleResponseDto dto = new GetAllScheduleResponseDto(
                             schedule.getId(),
                             schedule.getTitle(),
                             schedule.getContents(),
@@ -92,7 +108,7 @@ public class ScheduleService{
             }
         } else{
             for (Schedule schedule : schedules) {
-                GetScheduleResponseDto dto = new GetScheduleResponseDto(
+                GetAllScheduleResponseDto dto = new GetAllScheduleResponseDto(
                         schedule.getId(),
                         schedule.getTitle(),
                         schedule.getContents(),

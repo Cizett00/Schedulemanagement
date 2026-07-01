@@ -33,10 +33,10 @@ public class ScheduleController {
 //    }
 
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetScheduleResponseDto>> GetAllSchedule(
+    public ResponseEntity<List<GetAllScheduleResponseDto>> GetAllSchedule(
             @RequestParam(required = false) String name
             ){
-        List<GetScheduleResponseDto> result = scheduleService.getSchedule(name);
+        List<GetAllScheduleResponseDto> result = scheduleService.getSchedule(name);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
